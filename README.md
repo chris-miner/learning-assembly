@@ -13,3 +13,4 @@ Having had nothing but issues getting started on this, I thought I'd capture som
 - You don't have to statically link like I did.  You can use `ld hello.o -lSystem -L/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib` instead.
 - The clang integrated assembler is meant to be compatible with the GNU Assembler, so look to those sources for guidance.
 - System call numbers for linux and osx aren't the same.  So no stuffing 60 into %rax and expecting that to work.  Check my code samples for the way to do that on osx, if that is something you want to do.
+- The start label on OSX is `start` rather than `_start`.
