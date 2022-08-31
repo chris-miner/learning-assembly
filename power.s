@@ -4,23 +4,21 @@
 start:
     # set up variables
     movq $3, %rbx # base
-    movq $3, %rcx # power
+    movq $3, %rcx # current exponent count
 
-    # initialize result to 1
+    # initialize accumulated result to 1
     movq $1, %rax
 
-    # loop through power (rcx)
-loop:
-    # exit program if power is 0
-    cmpq $0, %rcx           # sets zero flag if power is 0
-    je end                  # jump to end if zero flag is set
+    # If exponent is 0, we are finished
+    cmpq $0, %rcx 
+    je end
 
-    # rax = rax * rbx
+powerloop:
+    # multiply accumulated result by base
     mulq %rbx
 
-    # decrement power (rcx)
-    decq %rcx
-    jmp loop
+    # decrement exponent count (rcx) and loop if not 0
+    loop powerloop
 
 # exit with result in %rax
 end:
