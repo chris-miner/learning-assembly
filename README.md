@@ -14,3 +14,4 @@ Having had nothing but issues getting started on this, I thought I'd capture som
 - The clang integrated assembler is meant to be compatible with the GNU Assembler, so look to those sources for guidance.
 - System call numbers for linux and osx aren't the same.  So no stuffing 60 into %rax and expecting that to work.  Check my code samples for the way to do that on osx, if that is something you want to do.
 - The start label on OSX is `start` rather than `_start`.
+- 32-bit absolute addressing is not supported in 64-bit mode.  This pops up as an issue in chapter 6.  The book offers the line `movq first_value, %rbx`, which produces an error message about 32-bit absolute addressing.  Instead you have to use `movq first_value(%rip), %rbx`.  This is RIP relative addressing, which is the default for x64 programs.
