@@ -3,17 +3,17 @@
 .globl start
 start:
     # set up variables
-    movq $15, %rbx # base
-    movq $4, %rcx # power
+    movq $3, %rbx # base
+    movq $3, %rcx # power
 
     # initialize result to 1
     movq $1, %rax
 
     # loop through power (rcx)
 loop:
-    # check if power is 0
-    addq $0, %rcx
-    jz end
+    # exit program if power is 0
+    cmpq $0, %rcx           # sets zero flag if power is 0
+    je end                  # jump to end if zero flag is set
 
     # rax = rax * rbx
     mulq %rbx
