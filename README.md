@@ -1,7 +1,7 @@
 # learning-assembly
 These are examples taken from Learn to Program with Assembly by Jonathan Bartlett (2021).  I really like the book (ISBN-13: 978-1-4842-7436-1).  Bartlett's book is very current and nicely written.
 
-The book assumes linux even provides a docker setup in case you don't have a linux box.  I didn't want to use a linux setup, prefering to use the 'built-in' tools that come with osx and the xcode tools.
+The book assumes linux, and even provides a docker setup in case you don't have a linux box.  I didn't want to use a linux setup — prefering to use the 'built-in' tools that come with osx and the xcode tools.
 
 Having had nothing but issues getting started on this, I thought I'd capture some tips here to help my fellow osx using assembler writing hopefuls.
 
