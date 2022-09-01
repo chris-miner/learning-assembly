@@ -15,7 +15,7 @@ start:
     movq numberofnumbers(%rip), %rcx
 
     # Put the address of the array in %rdx
-    lea mynumbers(%rip), %rdx
+    leaq mynumbers(%rip), %rdx
 
     # Use %rdi to hold the current-high value
     # Also use %rdi as our exit status code
