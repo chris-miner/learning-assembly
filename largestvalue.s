@@ -16,6 +16,9 @@ start:
     # book's solution is to use 32-bit absolute addressing e.g. 'movq length, %rcx'
     # which is not supported in 64-bit mode.  At least on osx.
     movq length(%rip), %rcx
+    # alternatively, we can use the 'lea' instruction to load the address and then dereference it.
+    # lea length(%rip), %rcx
+    # movq (%rcx), %rcx
 
     # address of the array of numbers goes in the rbx register
     # book used different addressing e.g. 'movq $numbers, %rbx'
