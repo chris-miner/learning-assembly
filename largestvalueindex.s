@@ -17,9 +17,9 @@ start:
     # Put the address of the array in %rdx
     leaq mynumbers(%rip), %rdx
 
-    # Use %rdi to hold the current-high value
+    # Use %rdi to hold the current-low value (start with the last element)
     # Also use %rdi as our exit status code
-    movq $0, %rdi
+    movq -8(%rdx,%rcx,8), %rdi
 
     ### Check Preconditions ###
     # If there are no numbers, stop
@@ -34,7 +34,7 @@ myloop:
 
     # If it is not bigger, go to the end of the loop
     cmp %rdi, %rax
-    jbe loopcontrol
+    jge loopcontrol
     # Otherwise, store this as the biggest element so far
     movq %rax, %rdi
 
