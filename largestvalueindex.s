@@ -17,8 +17,6 @@ start:
     # Put the address of the array in %rdx
     lea mynumbers(%rip), %rdx
 
-    # Put the index of the first element in %rbx
-    movq $0, %rbx
     # Use %rdi to hold the current-high value
     # Also use %rdi as our exit status code
     movq $0, %rdi
@@ -30,8 +28,9 @@ start:
 
 ### Main Loop ###
 myloop:
-    # Get the next value of mynumbers indexed by %rbx with base %rdx
-    movq (%rdx,%rbx,8), %rax
+    # Get the next value of mynumbers indexed by %rcx with base %rdx
+    # rcx goes from numberofnumbers to 1.  when rxc is zero we exit this loop.
+    movq -8(%rdx,%rcx,8), %rax
 
     # If it is not bigger, go to the end of the loop
     cmp %rdi, %rax
@@ -40,13 +39,11 @@ myloop:
     movq %rax, %rdi
 
 loopcontrol:
-    # Move %rbx to the next index
-    incq %rbx
-    # Decrement %rcx and keep going until %rcx is zero
+    # Decrement %rcx and keep. exit loop if %rcx is zero
     loop myloop
 
 ### Cleanup and Exit ###
 endloop:
-    # We're done - exit
+    # We're done - rdi has the largest value exit with this status
     movq $0x2000001, %rax
     syscall
