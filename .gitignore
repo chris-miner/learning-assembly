@@ -9,3 +9,5 @@
 
 ### Above combination will ignore all files without extension ###
 *.o
+a.out
+.DS_Store
