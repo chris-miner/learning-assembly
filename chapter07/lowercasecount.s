@@ -2,9 +2,9 @@
 .global start
 .data
 mytext:
-    .ascii "abc\0"
     .byte 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x70, 0x71, 0x72, 0x73, 0x74, 0
     .ascii "This is a string of characters.\0"
+    .ascii "abc\0"
 
 .text
 start:
@@ -34,13 +34,16 @@ checkloop:
 
     # Increment the number of lowercase characters
     incq %rdi
+
 checkloopcontrol:
+    # x86 is little endian so we are going to rotate right to get the next character
+    # rotating left would potentially skip the null terminator.
     rorq $8, %rax
     loop checkloop
 
 mainloopcontrol:
     # Move to the next two characters
-    addq $2, %rbx
+    addq $8, %rbx
     jmp mainloop
 
 end:
