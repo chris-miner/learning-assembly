@@ -1,6 +1,6 @@
 .text
-.globl _start
-_start:
+.globl start
+start:
     # initialize registers
     # base address of people array in %rbx
     leaq people(%rip), %rbx
