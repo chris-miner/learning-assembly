@@ -16,39 +16,29 @@ start:
 
 mainloop:
     # Load two characters into ax
-    movw (%rbx), %ax
+    movq (%rbx), %rax
 
-lowcheck:
+    # loop over the two characters
+    mov $8, %rcx
+checkloop:
     # Check if the low byte is the null terminator
     cmpb $0, %al
     je end
 
     # Check if the low byte is a lowercase letter
     cmpb $'a', %al
-    jb highcheck
+    jb checkloopcontrol
 
     cmpb $'z', %al
-    ja highcheck
+    ja checkloopcontrol
 
     # Increment the number of lowercase characters
     incq %rdi
+checkloopcontrol:
+    rorq $8, %rax
+    loop checkloop
 
-highcheck:
-    # Check if the high byte is the null terminator
-    cmpb $0, %ah
-    je end
-
-    # Check if the high byte is a lowercase letter
-    cmpb $'a', %ah
-    jb loopcontrol
-
-    cmpb $'z', %ah
-    ja loopcontrol
-
-    # Increment the number of lowercase characters
-    incq %rdi
-
-loopcontrol:
+mainloopcontrol:
     # Move to the next two characters
     addq $2, %rbx
     jmp mainloop
