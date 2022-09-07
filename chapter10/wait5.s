@@ -17,16 +17,16 @@ start:
     movq $0x2000074, %rax       # sys call number for SYS_gettimeofday (116)
     leaq curtime(%rip), %rdi    # 1st and only parameter is a pointer to curtime
     syscall
-    jc error
+    jb error
 
-    # add 5 seconds to the start time and stash in rdx
-    movq curtime(%rip), %rdx
-    addq $5, %rdx
+    # add 5 seconds to the start time and stash in rbx
+    movq curtime(%rip), %rbx
+    addq $5, %rbx
 
     movq $0x2000074, %rax       # sys call number for SYS_gettimeofday (116)
     leaq curtime(%rip), %rdi    # 1st and only parameter is a pointer to curtime
     syscall
-    jc error
+    jb error
 
 
 mainloop:
@@ -37,7 +37,7 @@ mainloop:
     jc error
 
     # If the current time is less than the end time, loop
-    cmpq %rdx, curtime(%rip)
+    cmpq %rbx, curtime(%rip)
     jb mainloop
 
 end:
