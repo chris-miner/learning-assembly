@@ -13,21 +13,12 @@ start:
     syscall
     jc error
 
-    # initialize the current time
-    movq $0x2000074, %rax       # sys call number for SYS_gettimeofday (116)
-    leaq curtime(%rip), %rdi    # 1st and only parameter is a pointer to curtime
-    syscall
-    jb error
-
     # add 5 seconds to the start time and stash in rbx
+    # we don't want to use any of the kernel interface registers for this.
+    # So no %rax, %rcx, %rdx, %rdi, %rsi, %r8, %r9, %r10, and %r11
+    # We can use any of rbx, r12, r13, r14, r15
     movq curtime(%rip), %rbx
     addq $5, %rbx
-
-    movq $0x2000074, %rax       # sys call number for SYS_gettimeofday (116)
-    leaq curtime(%rip), %rdi    # 1st and only parameter is a pointer to curtime
-    syscall
-    jb error
-
 
 mainloop:
     # repeatedly check current time
