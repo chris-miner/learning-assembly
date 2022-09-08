@@ -10,6 +10,8 @@ start:
     # initialize the current time
     movq $0x2000074, %rax       # sys call number for SYS_gettimeofday (116)
     leaq curtime(%rip), %rdi    # 1st and only parameter is a pointer to curtime
+    movq $0, %rsi               # passing in a null this time for completeness
+    movq $0, %rdx               # passing in a null this time for completeness
     syscall
     jc error
 
