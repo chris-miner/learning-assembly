@@ -1,4 +1,3 @@
-.globl start
 .data
 # In the book this is all in another file called persondata.s
 # You can do that under linux, but not under macos.  The constants
@@ -32,6 +31,7 @@ numpeople:
     .quad (endpeople - people) / PERSON_RECORD_SIZE 
 
 .text
+.globl start
 start:
     # initialize registers
     # base address of people array in %rbx
