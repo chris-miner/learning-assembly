@@ -11,13 +11,13 @@ start:
 
 # push NUMBER ... 1 onto the stack
     movq $NUMBER, %rcx
-pushloop:
+pushvalues:
     pushq %rcx
-    loop pushloop
+    loop pushvalues
 
 # set the result to 1
     movq $1, %rax
-mainloop:
+multiply:
     # get the value on the top of the stack
     popq %rbx
 
@@ -27,7 +27,7 @@ mainloop:
 
     # multiply the value on the stack by the value in %ax
     mulq %rbx
-    jmp mainloop
+    jmp multiply
 
 end:
     movq %rax, %rdi
