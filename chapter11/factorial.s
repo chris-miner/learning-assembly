@@ -7,24 +7,27 @@
 
 .globl start
 start:
-    mov $INITIAL, %ax
-    mov $NUMBER, %cx
-
     # sentinel value to stop the multiplication loop
     push $0
 
-# push 
+# push NUMBER ... 1 onto the stack
+    mov $NUMBER, %cx
 pushloop:
     push %cx
     loop pushloop
 
-# ax already contains the initial value of 1
+# set the result to 1
+    mov $INITIAL, %ax
 mainloop:
+    # get the value on the top of the stack
     pop %bx
+
+    # check for sentinel value
     cmp $0, %bx
     je end
+
+    # multiply the value on the stack by the value in %ax
     mul %bx
-loopcontrol:
     jmp mainloop
 
 end:
