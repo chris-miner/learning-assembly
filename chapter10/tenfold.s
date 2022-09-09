@@ -20,9 +20,9 @@ mainloop:
     mov $1, %rdi
     lea msg(%rip), %rsi
     mov $len, %rdx
-    mov %rcx, %r12         # preserve rcx which is clobbered by syscall
+    push %rcx         # preserve rcx which is clobbered by syscall
     syscall
-    mov %r12, %rcx         # restore rcx which was clobbered by syscall
+    pop %rcx         # restore rcx which was clobbered by syscall
     jc err
     loop mainloop
 
