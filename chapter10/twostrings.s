@@ -1,3 +1,6 @@
+# program to print out two sttrings, one after the other.
+# as an exercise for the reader, re-write this to use an
+# array of strings, printing them with a loop.
 .data
 string1:
     .ascii "This is the first string\n"
