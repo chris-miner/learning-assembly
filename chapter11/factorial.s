@@ -3,34 +3,33 @@
 # mulitply until we get to zero.
 .text
 .equ NUMBER, 4
-.equ INITIAL, 1
 
 .globl start
 start:
     # sentinel value to stop the multiplication loop
-    push $0
+    pushq $0
 
 # push NUMBER ... 1 onto the stack
-    mov $NUMBER, %cx
+    movq $NUMBER, %rcx
 pushloop:
-    push %cx
+    pushq %rcx
     loop pushloop
 
 # set the result to 1
-    mov $INITIAL, %ax
+    movq $1, %rax
 mainloop:
     # get the value on the top of the stack
-    pop %bx
+    popq %rbx
 
     # check for sentinel value
-    cmp $0, %bx
+    cmpq $0, %rbx
     je end
 
     # multiply the value on the stack by the value in %ax
-    mul %bx
+    mulq %rbx
     jmp mainloop
 
 end:
-    mov %ax, %di
-    mov $0x2000001, %rax
+    movq %rax, %rdi
+    movq $0x2000001, %rax
     syscall
