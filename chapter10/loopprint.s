@@ -1,14 +1,14 @@
 # this program loops ten times alternatingly prints
-# one of two messages
+# one of two messages.  Messages are set up as an array
+# of strings.
 .data
 messages:
     .quad hello, bye
 
 hello:
-    .ascii "Hello\n\0"
+    .ascii "Hello World!!!\n\0"
 bye:
-    .ascii "Goodbye\n\0"
-
+    .ascii "Goodbye, Have a nice day!\n\0"
 
 .text
 .globl start
@@ -20,9 +20,8 @@ start:
     # load the address of the messages array into %r13
     lea messages(%rip), %r13
 
-
 mainloop:
-    # set message index (odd or even)
+    # set message index r14 (odd or even)
     mov %r12, %r14
     and $1, %r14
 
