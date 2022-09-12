@@ -5,12 +5,26 @@ start:
     push %rbp
     mov %rsp, %rbp
 
+    # Call the function
+    # Step 1: Get the address of where to continue execution after the call
     lea next_instruction_address(%rip), %rbx
+    # Step 2: Stash the address on the stack
     push %rbx
-
+    # Step 3: "Call" the function
     jmp myfunction
 
 next_instruction_address:
+    # check the return code
+    cmp $0, %rax
+    je exit
+    jne error
+
+error:
+    mov $0x2000001, %rax
+    mov $1, %rdi
+    syscall
+
+exit:
     mov $0x2000001, %rax
     mov $0, %rdi
     syscall
@@ -48,5 +62,9 @@ leave:
 
 return:
     # finally return to caller
-    pop %rax
-    jmp *%rax
+    # Step 1: set the return value (success)
+    mov $0, %rax
+    # Step 2: recover the return address from the stack
+    pop %rcx
+    # Step 3: jump to the return address
+    jmp *%rcx
