@@ -14,19 +14,19 @@ start:
     jmp myfunction
 
 next_instruction_address:
-    # check the return code
+    # check the return value negative means failure
     cmp $0, %rax
-    je exit
-    jne error
+    jae exit
+    jb error
 
 error:
+    mov $-1, %rdi
     mov $0x2000001, %rax
-    mov $1, %rdi
     syscall
 
 exit:
+    mov %rax, %rdi
     mov $0x2000001, %rax
-    mov $0, %rdi
     syscall
 
 myfunction:
@@ -37,19 +37,22 @@ myfunction:
     mov %rsp, %rbp
     
     # step 3: allocate space for a local variable
-    sub $8, %rsp
+    # we only need 8 bytes, but we need to align the stack to 16 bytes
+    sub $16, %rsp
 
     # Alternatively, you can use enter for all three steps above
     # enter $8, $0
 
     # do some work
     movq $1, -8(%rbp)
-    mov -8(%rbp), %rax
-    mov $1, %rcx
+    movq $2, %rcx
 loop:
-    add $1, %rax
+    addq $1, -8(%rbp)
     loop loop
 
+    # Set the return value
+    movq  -8(%rbp), %rax
+    
 leave:
     # Unwind stack frame
     # step 1: restore stack pointer
@@ -62,9 +65,7 @@ leave:
 
 return:
     # finally return to caller
-    # Step 1: set the return value (success)
-    mov $0, %rax
-    # Step 2: recover the return address from the stack
+    # Step 1: recover the return address from the stack
     pop %rcx
-    # Step 3: jump to the return address
+    # Step 2: jump to the return address
     jmp *%rcx
