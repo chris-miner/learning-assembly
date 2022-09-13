@@ -19,16 +19,26 @@ factorial:
     # local variables
     # this is gratuitous, but I'm doing it to use the stack for temporary storage
     enter $16, $0
-.equ COUNTER, -8
+.equ RESULT, -8
 
+    # base case - the number is 0 or 1. return 1
     mov $1, %rax
-    mov %rdi, COUNTER(%rbp)
+    cmp $1, %rdi
+    jbe factorial_end
+    
+    # compound case - the number is greater than 1.
+    # stash the number and call factorial(number - 1)
+    mov %rdi, RESULT(%rbp)
 
-loop:
-    mulq COUNTER(%rbp)
-    decq COUNTER(%rbp)
-    jne loop
-
+    # call factorial on number - 1
+    dec %rdi
+    call factorial
+ 
+    # RAX has the result of the recursive call
+    # mulitply the result of the recursive call by the number
+    mulq RESULT(%rbp)
+ 
+ factorial_end:
     # return the result
     # RAX = result
     leave
