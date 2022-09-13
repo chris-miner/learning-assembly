@@ -1,4 +1,6 @@
-# an example of a function that returns a value
+# This program is an example of calling a function that returns a value.
+# The stack is setup and torn down manually.  This is not a good way to do it.
+# It is better to use enter/leave/return.
 .text
 .globl start
 start:
