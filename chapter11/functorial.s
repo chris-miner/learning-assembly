@@ -14,31 +14,35 @@ start:
 
 factorial:
     # This function takes one argument and returns the factorial of that number.
-    # RDI = number to calculate factorial of.
+    # RDI = NUMBER.
 
     # local variables
     # this is gratuitous, but I'm doing it to use the stack for temporary storage
     enter $16, $0
-.equ RESULT, -8
+.equ NUMBER, -8
 
-    # base case - the number is 0 or 1. return 1
-    mov $1, %rax
+    # When NUMBER is 0 or 1 return the base case (1).
     cmp $1, %rdi
-    jbe factorial_end
-    
-    # compound case - the number is greater than 1.
-    # stash the number and call factorial(number - 1)
-    mov %rdi, RESULT(%rbp)
+    jbe base_case
+    # when NUMBER is 2 or more return the recursive case (NUMBER * FACTORIAL(NUMBER - 1))
+    ja recursive_case
+
+base_case:
+    mov $1, %rax
+    jmp return
+
+recursive_case:
+    # stash the number on the stack and call factorial(number - 1)
+    mov %rdi, NUMBER(%rbp)
 
     # call factorial on number - 1
     dec %rdi
     call factorial
  
-    # RAX has the result of the recursive call
-    # mulitply the result of the recursive call by the number
-    mulq RESULT(%rbp)
+    # mulitply the result (RAX) by the number we stashed earlier
+    mulq NUMBER(%rbp)
  
- factorial_end:
+ return:
     # return the result
     # RAX = result
     leave
