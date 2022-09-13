@@ -19,7 +19,7 @@ factorial:
     # local variables
     # this is gratuitous, but I'm doing it to use the stack for temporary storage
     enter $16, $0
-.equ NUMBER, -8
+.equ LOCAL_NUMBER, -8
 
     # When NUMBER is 0 or 1 return the base case (1).
     cmp $1, %rdi
@@ -33,14 +33,14 @@ base_case:
 
 recursive_case:
     # stash the number on the stack and call factorial(number - 1)
-    mov %rdi, NUMBER(%rbp)
+    mov %rdi, LOCAL_NUMBER(%rbp)
 
     # call factorial on number - 1
     dec %rdi
     call factorial
  
     # mulitply the result (RAX) by the number we stashed earlier
-    mulq NUMBER(%rbp)
+    mulq LOCAL_NUMBER(%rbp)
  
  return:
     # return the result
