@@ -1,10 +1,10 @@
 # power takes two quad word unsigned arguments (RDI, RSI) and returns
 # the result of raising the base (RDI) to the power of the exponent (RSI).
-.globl power
+.globl _power
 
 .text
 
-power:
+_power:
     # RDI = BASE
     # RSI = EXPONENT
     # returns BASE^EXPONENT in RAX
@@ -22,7 +22,7 @@ power:
 mainloop:
     # multiply base by itself
     mulq %rdi
-    
+
     # decrement counter
     decq -8(%rbp)
     jnz mainloop
