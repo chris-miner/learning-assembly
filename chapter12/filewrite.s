@@ -25,6 +25,7 @@ joshfavorite2:
 .text
 .globl _main
 _main:
+    # We have one local variable, the file pointer.
     enter $16, $0
 .equ FILE, -8
 
@@ -37,12 +38,14 @@ _main:
     mov %rax, FILE(%rbp)
 
     # write the first formatted string to the file
+    # (%rdi, %rsi, %rdx, and %rcx)
     mov FILE(%rbp), %rdi
     lea format1(%rip), %rsi
     lea sallyname(%rip), %rdx
     mov sallyage(%rip), %rcx
-    # not passing floating point values to the function
-    mov $0, %rax
+    # frpintf is variadic. According to the ABI (3.5.7) we need to pass the number
+    # floating point paramters passed to the function in %al.  We have none.
+    mov $0, %al
     call _fprintf
 
     # write the second formatted string to the file
@@ -51,14 +54,13 @@ _main:
     mov joshfavorite1(%rip), %rdx
     mov joshfavorite2(%rip), %rcx
     lea joshname(%rip), %r8
-
-    # not passing floating point values to the function
-    mov $0, %rax
+    mov $0, %al
     call _fprintf
 
     # close the file
     mov FILE(%rbp), %rdi
     call _fclose
+
     # exit the program
     mov $0, %rax
     leave
