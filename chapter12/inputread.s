@@ -13,26 +13,46 @@ printf_format:
 .text
 .globl _main
 _main:
-    # two local variables
-    # the first is the base, the second is the exponent
-    enter $16, $0
-.equ BASE, -8
-.equ EXP, -16
+    # four local variables
+    # BASE - the base of the power
+    # EXP - the exponent to raise the base to
+    # STDOUT - the file descriptor for stdout
+    # STDIN - the file descriptor for stdin
+    enter $32, $0
+.equ BASE, -0x8
+.equ EXP, -0x10
+.equ STDIN, -0x18
+.equ STDOUT, -0x20
     movq $0, BASE(%rbp)
     movq $0, EXP(%rbp)
+	
+    # get pointer to standard input
+    movq ___stdinp@GOTPCREL(%rip), %rax
+    # dereference the pointer to get standard input
+    movq (%rax), %rax
+    # store the address of stdin as a local variable
+	movq %rax, STDIN(%rbp)
+
+    # repeat for standard output
+	movq ___stdoutp@GOTPCREL(%rip), %rax
+    movq (%rax), %rax
+	movq %rax, STDOUT(%rbp)
 
     # print the prompt
-    lea prompt(%rip), %rdi
-    mov $0, %rax
-    call _printf
+	movq STDOUT(%rbp), %rdi
+    lea prompt(%rip), %rsi
+    xor %al, %al
+    # call *_fprintf@GOTPCREL(%rip)
+    call _fprintf
 
 scan:
     # scan the numbers
-    lea scanf_format(%rip), %rdi
-    lea BASE(%rbp), %rsi
-    lea EXP(%rbp), %rdx
-    mov $0, %rax
-    call _scanf
+    movq STDIN(%rbp), %rdi
+    lea scanf_format(%rip), %rsi
+    lea BASE(%rbp), %rdx
+    lea EXP(%rbp), %rcx
+    xor %al, %al
+    call _fscanf
 
 calc:
     # calculate result
@@ -42,15 +62,16 @@ calc:
 
 print:
     # print the result
-    lea printf_format(%rip), %rdi
-    mov BASE(%rbp), %rsi
-    mov EXP(%rbp), %rdx
-    mov %rax, %rcx
-    mov $0, %rax
-    call _printf
+    movq STDOUT(%rbp), %rdi
+    lea printf_format(%rip), %rsi
+    mov BASE(%rbp), %rdx
+    mov EXP(%rbp), %rcx
+    mov %rax, %r8
+    xor %al, %al
+    call _fprintf
 
 exit:
     # exit
-    mov $0, %eax
+    xor %al, %al
     leave
     ret
