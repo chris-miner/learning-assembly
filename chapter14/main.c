@@ -1,3 +1,7 @@
+/*
+  program to make use of the allocate function implemented in in
+  assembler using sbrk system call.
+*/
 #include <stdio.h>
 
 void *allocate(int);
