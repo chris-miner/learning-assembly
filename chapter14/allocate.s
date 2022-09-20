@@ -43,7 +43,7 @@ allocate_continue:
     movq memory_end(%rip), %r14
 
 allocate_loop:
-    # If we have reached the end of memory
+    # If we have reached the end of memory (r14)
     # we have to allocate new memory by # moving the break.
     cmpq %r13, %r14
     je allocate_move_break
@@ -79,8 +79,6 @@ _deallocate:
 allocate_init:
     # find program break
     xor %rdi, %rdi
-    # mov $BRK_SYSCALL, %rax
-    # syscall
     call _sbrk
 
     # current break is start and end of our memory
@@ -98,9 +96,7 @@ allocate_move_break:
     # Save this value
     movq %rdi, memory_end(%rip)
 
-    # Tell Linux where the new break is
-    # movq $BRK_SYSCALL, %rax
-    # syscall
+    # Tell OS where the new break is
     call _sbrk
 
     # Address is in %r8 - mark size and availability
